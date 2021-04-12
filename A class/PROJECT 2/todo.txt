@@ -1,0 +1,10 @@
+
+
+1. read successive data
+    construct a parse tree for the expression if well formed
+        print that parse tree to std
+    if not well formed, parser should print a fail message
+
+values: a-z and symbols
+expressions are on a single line of input
+parser terminates on eof on standard input
