@@ -20,7 +20,7 @@ void freeNode(NodePtr node, void (*freeObject)(void *))
     free(node);
 }
 
-Bstptr createList(int (*compareId)(const void *, const void *),
+Bstptr createBst(int (*compareId)(const void *, const void *),
                   char *(*toString)(void *),
                   void (*freeObject)(void *))
 {
@@ -30,7 +30,7 @@ Bstptr createList(int (*compareId)(const void *, const void *),
     temp->p = NULL;
     temp->left = NULL;
     temp->right = NULL;
-    temp->compareTo = compareId;
+    temp->compareId = compareId;
     temp->toString = toString;
     temp->freeObject = freeObject;
     return temp;
@@ -38,29 +38,32 @@ Bstptr createList(int (*compareId)(const void *, const void *),
 
 int *compareInt(const void *x, const void *y)
 {
-    return (*(int *)x) - (*(int *)y);
+    return 0;
+    // return (*(int *)x) - (*(int *)y);
 }
 
 int *compareId(const void *x, const void *y)
 {
     // COULD BE DANGEROUS AS WE ARE ASSIGNING GENERIC "v" TO "int"
-    int k1, k2;
-    k1 = ((NodePtr)x)->v;
-    k2 = ((NodePtr)y)->v;
-    return k1 - k2;
+    // int k1, k2;
+    // k1 = (int) ((NodePtr)x)->v;
+    // k2 = (int) ((NodePtr)y)->v;
+    // return (k1 - k2)&;
+    return 0;
 }
 
 Bstptr lookup(Bstptr head, void *v)
 {
     if (head == NULL)
         return NULL;
+    if(v == NULL) return NULL;
 
-    while (compareTo(head->v, v) != 0)
+    while (compareId(head->v, v) != 0)
     {
-        if(compareTo(head->v, v) < 0){
+        if(compareId(head->v, v) < 0){
             head = head->left;
         }
-        else if(compareTo(head->v, v) > 0){
+        else if(compareId(head->v, v) > 0){
             head = head->right;
         }
         if(head==NULL) return NULL;
@@ -77,10 +80,10 @@ void insert(Bstptr head, NodePtr node) {
         head = node;
     }
     while(head!=NULL){
-        if(compareTo(head->v, node->v) < 0){
+        if(compareId(head->v, node->v) < 0){
             head = head->left;
         }
-        else if(compareTo(head->v, node->v) > 0){
+        else if(compareId(head->v, node->v) > 0){
             head = head->right;
         }
     }
@@ -108,7 +111,7 @@ void delete (Bstptr head, NodePtr node)
     else {
         NodePtr succ = min_succesor(to_be_deleted);
         if(succ == NULL){
-            printf("delete: something went wrong in min_successor")
+            printf("delete: something went wrong in min_successor");
             return;
         }
         succ->left = to_be_deleted->left;
@@ -133,3 +136,8 @@ NodePtr min_succesor(NodePtr head)
     return NULL;
 }
 
+
+int main(){
+    printf("Test");
+    return 1;
+}

@@ -14,13 +14,16 @@ struct node
     void *p;
     NodePtr left, right;
 
-    int (*compareTo)(const void *, const void *);
+    int (*compareId)(const void *, const void *);
     void (*freeObject)(void *);
     char *(*toString)(void *);
 };
 
 NodePtr createNode(void *obj1, void *obj2);
 void freeNode(NodePtr node, void (*freeObject)(void *));
+Bstptr createBst(int (*compareId)(const void *, const void *),
+                  char *(*toString)(void *),
+                  void (*freeObject)(void *));
 void delete (Bstptr head, NodePtr node) ;
 
 NodePtr min_succesor(NodePtr head);
