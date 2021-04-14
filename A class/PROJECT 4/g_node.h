@@ -21,5 +21,8 @@ struct node
 
 NodePtr createNode(void *obj1, void *obj2);
 void freeNode(NodePtr node, void (*freeObject)(void *));
+void delete (Bstptr head, NodePtr node) ;
+
+NodePtr min_succesor(NodePtr head);
 
 #endif
