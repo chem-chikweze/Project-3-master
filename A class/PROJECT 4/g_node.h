@@ -6,12 +6,17 @@
 
 typedef struct node NODE;
 typedef struct node *NodePtr;
+typedef struct node *Bstptr;
 
 struct node
 {
     void *v;
     void *p;
     NodePtr left, right;
+
+    int (*compareTo)(const void *, const void *);
+    void (*freeObject)(void *);
+    char *(*toString)(void *);
 };
 
 NodePtr createNode(void *obj1, void *obj2);
