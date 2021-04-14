@@ -11,18 +11,16 @@ NodePtr createNode(void *obj1, void *obj2)
     return temp;
 }
 
-void freeNode(NodePtr node, void (*freeObject)(void *))
+void freeNode(NodePtr node)
 {
     if (node == NULL)
         return;
-    (*freeObject)(node->p);
-    (*freeObject)(node->v);
+    free(node->p);
+    free(node->v);
     free(node);
 }
 
-Bstptr createBst(int (*compareId)(const void *, const void *),
-                  char *(*toString)(void *),
-                  void (*freeObject)(void *))
+Bstptr createBst(int (*comparison_function)(const void *, const void *))
 {
     Bstptr temp;
     temp = (Bstptr)malloc(sizeof(NODE));
@@ -30,40 +28,23 @@ Bstptr createBst(int (*compareId)(const void *, const void *),
     temp->p = NULL;
     temp->left = NULL;
     temp->right = NULL;
-    temp->compareId = compareId;
-    temp->toString = toString;
-    temp->freeObject = freeObject;
+    temp->compair = comparison_function;
     return temp;
-}
-
-int *compareInt(const void *x, const void *y)
-{
-    return 0;
-    // return (*(int *)x) - (*(int *)y);
-}
-
-int *compareId(const void *x, const void *y)
-{
-    // COULD BE DANGEROUS AS WE ARE ASSIGNING GENERIC "v" TO "int"
-    // int k1, k2;
-    // k1 = (int) ((NodePtr)x)->v;
-    // k2 = (int) ((NodePtr)y)->v;
-    // return (k1 - k2)&;
-    return 0;
 }
 
 Bstptr lookup(Bstptr head, void *v)
 {
+    Bstptr temp = head;
     if (head == NULL)
         return NULL;
     if(v == NULL) return NULL;
 
-    while (compareId(head->v, v) != 0)
+    while (temp->compair(head->v, v) != 0)
     {
-        if(compareId(head->v, v) < 0){
+        if(temp->compair(head->v, v) < 0){
             head = head->left;
         }
-        else if(compareId(head->v, v) > 0){
+        else if(temp->compair(head->v, v) > 0){
             head = head->right;
         }
         if(head==NULL) return NULL;
@@ -72,6 +53,7 @@ Bstptr lookup(Bstptr head, void *v)
 }
 
 void insert(Bstptr head, NodePtr node) {
+    NodePtr temp = head;
     if(node==NULL){
         printf("insert: node empty");
         return;
@@ -80,10 +62,10 @@ void insert(Bstptr head, NodePtr node) {
         head = node;
     }
     while(head!=NULL){
-        if(compareId(head->v, node->v) < 0){
+        if(temp->compair(head->v, node->v) < 0){
             head = head->left;
         }
-        else if(compareId(head->v, node->v) > 0){
+        else if(temp->compair(head->v, node->v) > 0){
             head = head->right;
         }
     }
@@ -136,8 +118,35 @@ NodePtr min_succesor(NodePtr head)
     return NULL;
 }
 
+// int compareInt(const void* n, const void* m) {
+//     return (int) n + (int)m;
+// }
+// int (*functionPtr)(int,int);
+
+// functionPtr = &addInt;
+
+int compareInt(const void *x, const void *y)
+{
+    NodePtr a = (NodePtr)x;
+    NodePtr b = (NodePtr)y;
+
+    return (int)b->v - (int)a->v;
+    // return (*(int *)x) - (*(int *)y);
+}
+
+// int *compareId(const void *x, const void *y)
+// {
+//     // COULD BE DANGEROUS AS WE ARE ASSIGNING GENERIC "v" TO "int"
+//     // int k1, k2;
+//     // k1 = (int) ((NodePtr)x)->v;
+//     // k2 = (int) ((NodePtr)y)->v;
+//     // return (k1 - k2)&;
+//     return 0;
+// }
+
 
 int main(){
     printf("Test");
+    Bstptr csg = createBst((compareInt));
     return 1;
 }
