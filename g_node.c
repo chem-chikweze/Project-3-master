@@ -179,7 +179,13 @@ NodePtr min_succesor(NodePtr head)
 }
 
 void printall(NodePtr head){
-    
+    printf("%s\n", head->v);
+    if(head->left != NULL){
+        printall(head->left);
+    }
+    if(head->right != NULL){
+        printall(head->right);
+    }
 }
 
 int main(){
@@ -200,5 +206,7 @@ int main(){
         printf("\nhello %s", hea->left->p);
     }
     // printf("\nhere is head.left's v %s", hea->left->v);
+    printf("\n");
+    printall(hea);
     return 1;
 }
