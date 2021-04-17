@@ -1,6 +1,7 @@
 {
     "C_Cpp.errorSquiggles": "Enabled",
     "files.associations": {
-        "algorithm": "c"
+        "algorithm": "c",
+        "__node_handle": "c"
     }
 }
