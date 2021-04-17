@@ -55,6 +55,9 @@ TuplePtr fill(int num, ...){
     return h;
 }
 
+
+
+
 int main(){
     TuplePtr csg = createTuple("CSG", 3);
     csg = fill(3, csg, "CSC 173", "31531764", "A");
