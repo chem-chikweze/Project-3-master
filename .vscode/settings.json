@@ -2,6 +2,8 @@
     "C_Cpp.errorSquiggles": "Enabled",
     "files.associations": {
         "algorithm": "c",
-        "__node_handle": "c"
+        "__node_handle": "c",
+        "stdio.h": "c",
+        "g_node.h": "c"
     }
 }
