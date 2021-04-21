@@ -19,7 +19,6 @@ void freeNode(NodePtr node, void (*freeObject)(void *))
     if (node == NULL)
         return;
     (*freeObject)(node->p);
-    (*freeObject)(node->v);
     free(node);
 }
 
@@ -27,21 +26,18 @@ void freeObject(void* node){
     free(node);
 }
 
-Bstptr createBst(void *obj1, void *obj2, int (*comparer)(const void *, const void *),
-                  void (*freeer)(void *))
+Bstptr createBst(int obj1, TuplePtr obj2)
 {
     Bstptr temp = (Bstptr)malloc(sizeof(NODE));
     temp->v = obj1;
     temp->p = obj2;
     temp->left = NULL;
     temp->right = NULL;
-    temp->compareStr = comparer;
     // temp->toString = toString;
-    temp->freeObject = freeer;
     return temp;
 }
 
-int compareInt(const void *x, const void *y)
+int compareInt(Bstptr x, TuplePtr y)
 {
     int a = (int)(((NodePtr)x)->v);
     int b = (int)(((NodePtr)y)->v);
@@ -50,33 +46,40 @@ int compareInt(const void *x, const void *y)
     return (int)(a-b);
 }
 
-int compareStr(const void *x, const void *y)
-{
-    char* a = (char*)(((NodePtr)x)->v);
-    char* b = (char*)(((NodePtr)y)->v);
-    return strcmp(a,b);
-}
+// int compareStr(const void *x, const void *y)
+// {
+//     char* a = (char*)(((NodePtr)x)->v);
+//     char* b = (char*)(((NodePtr)y)->v);
+//     return strcmp(a,b);
+// }
 
-Bstptr lookup(Bstptr head, void *v)
+NodePtr lookupNode(Bstptr head, TuplePtr v)
 {
-    if (head == NULL)
+    Bstptr temp = head;
+    if(v==NULL){
+        printf("insert: node==null");
         return NULL;
-    if(v == NULL) return NULL;
-
-    while (compareStr(v, head->v) != 0)
+    }else if(temp==NULL){
+        printf("insert: head==null");
+        return NULL;
+    }else
     {
-        if(compareStr(v, head->v) < 0){
-            head = head->left;
+        while(temp!=NULL)
+        {
+            if((v->loc - head->v) < 0){
+                temp = temp->left;
+            }
+            else if((v->loc - head->v) > 0){
+                temp = temp->right;
+            }else if((v->loc - head->v) == 0){
+                return temp;
+            }
         }
-        else if(compareStr(v, head->v) > 0){
-            head = head->right;
-        }
-        if(head==NULL) return NULL;
+        return NULL;
     }
-    return head;
 }
 
-Bstptr insert(Bstptr head, Bstptr node) {
+Bstptr insertNode(Bstptr head, Bstptr node) {
     Bstptr temp = head;
     if(node==NULL){
         printf("insert: node==null");
@@ -89,7 +92,7 @@ Bstptr insert(Bstptr head, Bstptr node) {
     {
         while(temp!=NULL)
         {
-            if(compareStr(node, temp) < 0){
+            if((node->v - head->v) < 0){
                 if (temp->left==NULL){
                     temp->left = node;
                     break;
@@ -97,7 +100,7 @@ Bstptr insert(Bstptr head, Bstptr node) {
                     temp = temp->left;
                 }
             }
-            else if(compareStr(node, temp) > 0){
+            else if((node->v - head->v) > 0){
                 if (temp->right == NULL){
                     temp->right = node;
                     break;
@@ -108,33 +111,33 @@ Bstptr insert(Bstptr head, Bstptr node) {
                 
             }     
         }
-        printf("%s\n",head->left->v);
+        printf("%d\n",head->left->v);
         return head;
     }   
 }
 
-void inserti(Bstptr head, Bstptr node) {
-    if(node==NULL){
-        printf("insert: node empty");
-        return;
-    }
-    if(head==NULL){
-        head = node;
-    }
-    while(head!=NULL){
-        if(compareInt(node, head) < 0){
-            head = head->left;
-        }
-        else if(compareInt(node, head) > 0){
-            head = head->right;
-        }
-    }
-    head = node;
-}
+// void inserti(Bstptr head, Bstptr node) {
+//     if(node==NULL){
+//         printf("insert: node empty");
+//         return;
+//     }
+//     if(head==NULL){
+//         head = node;
+//     }
+//     while(head!=NULL){
+//         if(compareInt(node, head) < 0){
+//             head = head->left;
+//         }
+//         else if(compareInt(node, head) > 0){
+//             head = head->right;
+//         }
+//     }
+//     head = node;
+// }
 
-void delete(Bstptr head, NodePtr node) 
+void deleteNode(Bstptr head, TuplePtr node) 
 {
-    NodePtr to_be_deleted = lookup(head, node->v);
+    NodePtr to_be_deleted = lookupNode(head, node);
     // null null
     if(to_be_deleted->left == NULL && to_be_deleted->right == NULL){
         to_be_deleted = NULL;
@@ -179,7 +182,7 @@ NodePtr min_succesor(NodePtr head)
 }
 
 void printall(NodePtr head){
-    printf("%s\n", head->v);
+    printf("%d\n", head->v);
     if(head->left != NULL){
         printall(head->left);
     }
@@ -188,25 +191,25 @@ void printall(NodePtr head){
     }
 }
 
-int main(){
-    // NodePtr newNodex = createNode("heaven", "b");
-    // NodePtr node2x = createNode("back", "adam");
+// int main(){
+//     // NodePtr newNodex = createNode("heaven", "b");
+//     // NodePtr node2x = createNode("back", "adam");
 
-    Bstptr hea = createBst("heaven", "b", (*compareStr), (*freeObject));
-    Bstptr leaf = createBst("back", "adam", (*compareStr), (*freeObject));
-    Bstptr leaf1 = createBst("who", "adam", (*compareStr), (*freeObject));
-    Bstptr leaf2 = createBst("aaman", "adam", (*compareStr), (*freeObject));
-    Bstptr leaf3 = createBst("oleg", "adam", (*compareStr), (*freeObject));
+//     Bstptr hea = createBst("heaven", "b");
+//     Bstptr leaf = createBst("back", "adam");
+//     Bstptr leaf1 = createBst("who", "adam");
+//     Bstptr leaf2 = createBst("aaman", "adam");
+//     Bstptr leaf3 = createBst("oleg", "adam");
 
-    hea = insert(hea, leaf);
-    hea = insert(hea, leaf1);
-    hea = insert(hea, leaf2);
-    hea = insert(hea, leaf3);
-    if(hea->left != NULL){
-        printf("\nhello %s", hea->left->p);
-    }
-    // printf("\nhere is head.left's v %s", hea->left->v);
-    printf("\n");
-    printall(hea);
-    return 1;
-}
+//     hea = insertNode(hea, leaf);
+//     hea = insertNode(hea, leaf1);
+//     hea = insertNode(hea, leaf2);
+//     hea = insertNode(hea, leaf3);
+//     if(hea->left != NULL){
+//         printf("\nhello %s", hea->left->p);
+//     }
+//     // printf("\nhere is head.left's v %s", hea->left->v);
+//     printf("\n");
+//     printall(hea);
+//     return 1;
+// }
