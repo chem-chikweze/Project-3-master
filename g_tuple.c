@@ -13,7 +13,6 @@ TuplePtr createTuple(char* na, int l, int k){
 
     tup->row = (char **) calloc(l, sizeof(char *));
     tup->next = NULL;
-    
     return tup;
 }
 
@@ -234,6 +233,7 @@ int main(){
     csgtable = insert(csgtable, csg6);
 
     Bstptr csgbst = createBst(csg1->loc, csg1);
+    
     csgbst = insertNode(csgbst, createBst(csg2->loc, csg2));
     csgbst = insertNode(csgbst, createBst(csg3->loc, csg3));
     csgbst = insertNode(csgbst, createBst(csg4->loc, csg4));

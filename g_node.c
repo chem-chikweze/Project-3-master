@@ -1,18 +1,4 @@
 #include "g_node.h"
-// typedef *compareStr comp;
-// typedef *freeObject freed;
-
-
-
-// NodePtr createNode(void *obj1, void *obj2)
-// {
-//     NodePtr temp = (NodePtr)malloc(sizeof(NODE));
-//     temp->v = obj1;
-//     temp->p = obj2;
-//     temp->left = NULL;
-//     temp->right = NULL;
-//     return temp;
-// }
 
 void freeNode(NodePtr node, void (*freeObject)(void *))
 {
@@ -34,24 +20,9 @@ Bstptr createBst(int obj1, TuplePtr obj2)
     temp->left = NULL;
     temp->right = NULL;
     // temp->toString = toString;
+    printf("alm");
     return temp;
 }
-
-int compareInt(Bstptr x, TuplePtr y)
-{
-    int a = (int)(((NodePtr)x)->v);
-    int b = (int)(((NodePtr)y)->v);
-    // a is new node
-    // b is present old node
-    return (int)(a-b);
-}
-
-// int compareStr(const void *x, const void *y)
-// {
-//     char* a = (char*)(((NodePtr)x)->v);
-//     char* b = (char*)(((NodePtr)y)->v);
-//     return strcmp(a,b);
-// }
 
 NodePtr lookupNode(Bstptr head, TuplePtr v)
 {
@@ -93,47 +64,17 @@ Bstptr insertNode(Bstptr head, Bstptr node) {
         while(temp!=NULL)
         {
             if((node->v - head->v) < 0){
-                if (temp->left==NULL){
-                    temp->left = node;
-                    break;
-                }else{
-                    temp = temp->left;
-                }
+                temp = temp->left;
             }
             else if((node->v - head->v) > 0){
-                if (temp->right == NULL){
-                    temp->right = node;
-                    break;
-                }else
-                {
-                    temp = temp->right;
-                }
-                
+                temp = temp->right;
             }     
         }
-        printf("%d\n",head->left->v);
+        temp = node;
+        printf("%d\n",head->v);
         return head;
-    }   
+    }
 }
-
-// void inserti(Bstptr head, Bstptr node) {
-//     if(node==NULL){
-//         printf("insert: node empty");
-//         return;
-//     }
-//     if(head==NULL){
-//         head = node;
-//     }
-//     while(head!=NULL){
-//         if(compareInt(node, head) < 0){
-//             head = head->left;
-//         }
-//         else if(compareInt(node, head) > 0){
-//             head = head->right;
-//         }
-//     }
-//     head = node;
-// }
 
 void deleteNode(Bstptr head, TuplePtr node) 
 {
