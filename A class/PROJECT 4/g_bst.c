@@ -34,10 +34,21 @@ Bstptr lookup(Bstptr t, void *v)
     if (t->head == NULL)
         return NULL;
 
-    while (compareTo(t->head->v, v))
+    NodePtr head = t->head;
+
+    while (compareTo(head->v, v) != 0)
     {
-        /* code */
+        if(compareTo(head->v, v)< 0){
+            head = head->left;
+        }
+        else if(compareTo(head->v, v) > 0){
+            head = head->right;
+        }
+        if(head == NULL) return NULL;
     }
+    
 }
-void insert(Bstptr t, NodePtr node) {}
+void insert(Bstptr t, NodePtr node) {
+
+}
 int delete (Bstptr t, void *v) {}
