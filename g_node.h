@@ -15,10 +15,7 @@ struct node
     int v;
     TuplePtr p;
     NodePtr left, right;
-
-    int (*compareStr)(const void *, const void *);
-    void (*freeObject)(void *);
-    // char *(*toString)(void *);
+    TuplePtr next;
 };
 
 NodePtr createNode(void *obj1, void *obj2);

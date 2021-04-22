@@ -22,7 +22,6 @@ struct tuple{
     int key;
     char** row;
     int loc;
-    TuplePtr next;
 
     // col_ptr row;
 };
@@ -34,9 +33,17 @@ struct table{
     TuplePtr value;
 };
 
+typedef struct list* List;
+struct list{
+    char* key;
+    TuplePtr value;
+    List next;
+};
+
 TuplePtr createTuple(char* na, int l, int k);
 TuplePtr fill(int num, ...);
 int hashcode(TuplePtr data);
 int sum_string(char* k_string);
 void printTuple(TuplePtr data);
 int hash(char* data);
+void printTable(HashTable head);

@@ -12,6 +12,8 @@ void freeObject(void* node){
     free(node);
 }
 
+
+
 Bstptr createBst(int obj1, TuplePtr obj2)
 {
     Bstptr temp = (Bstptr)malloc(sizeof(NODE));
@@ -20,7 +22,16 @@ Bstptr createBst(int obj1, TuplePtr obj2)
     temp->left = NULL;
     temp->right = NULL;
     // temp->toString = toString;
-    printf("alm");
+    return temp;
+}
+Bstptr newBst(Bstptr obj2)
+{
+    Bstptr temp = (Bstptr)malloc(sizeof(NODE));
+    temp->v = obj2->v;
+    temp->p = obj2->p;
+    temp->left = obj2->left;
+    temp->right = obj2->right;
+    // temp->toString = toString;
     return temp;
 }
 
@@ -35,49 +46,51 @@ NodePtr lookupNode(Bstptr head, TuplePtr v)
         return NULL;
     }else
     {
+        printf("here");
         while(temp!=NULL)
         {
             if((v->loc - head->v) < 0){
+                printf("\nlookupnode: loc: %d", v->loc);
                 temp = temp->left;
             }
             else if((v->loc - head->v) > 0){
+                printf("\nlookupnode: rloc: %d", v->loc);
                 temp = temp->right;
             }else if((v->loc - head->v) == 0){
                 return temp;
             }
         }
+        printf("\nlookupnode: 3null");
         return NULL;
     }
 }
 
-Bstptr insertNode(Bstptr head, Bstptr node) {
-    Bstptr temp = head;
-    if(node==NULL){
-        printf("insert: node==null");
-        return temp;
-    }else if(temp==NULL){
-        printf("insert: head==null");
-        temp = node;
-        return temp;
-    }else
+Bstptr insertNode(Bstptr head, Bstptr node) 
+{ 
+    if(head == NULL)
     {
-        while(temp!=NULL)
-        {
-            if((node->v - head->v) < 0){
-                temp = temp->left;
-            }
-            else if((node->v - head->v) > 0){
-                temp = temp->right;
-            }     
-        }
-        temp = node;
-        printf("%d\n",head->v);
-        return head;
+        return newBst(node);
     }
-}
+
+    if((node->p->loc - (head)->p->loc) < 0)
+    {
+        head->left = insertNode((head)->left, node);
+    }
+    else if((node->p->loc - (head)->p->loc) > 0)
+    {
+        head->right = insertNode((head)->right, node);            
+    }
+    // printf("U %d %d\n", head->v, node->v);
+    return head;
+     
+}    
+
 
 void deleteNode(Bstptr head, TuplePtr node) 
 {
+    printf("\n");
+    printTuple(node);
+
     NodePtr to_be_deleted = lookupNode(head, node);
     // null null
     if(to_be_deleted->left == NULL && to_be_deleted->right == NULL){
@@ -122,35 +135,12 @@ NodePtr min_succesor(NodePtr head)
     return NULL;
 }
 
-void printall(NodePtr head){
-    printf("%d\n", head->v);
+void printTree(NodePtr head){
+    printf("%s", head->p->row[0]);
     if(head->left != NULL){
-        printall(head->left);
+        printTree(head->left);
     }
     if(head->right != NULL){
-        printall(head->right);
+        printTree(head->right);
     }
 }
-
-// int main(){
-//     // NodePtr newNodex = createNode("heaven", "b");
-//     // NodePtr node2x = createNode("back", "adam");
-
-//     Bstptr hea = createBst("heaven", "b");
-//     Bstptr leaf = createBst("back", "adam");
-//     Bstptr leaf1 = createBst("who", "adam");
-//     Bstptr leaf2 = createBst("aaman", "adam");
-//     Bstptr leaf3 = createBst("oleg", "adam");
-
-//     hea = insertNode(hea, leaf);
-//     hea = insertNode(hea, leaf1);
-//     hea = insertNode(hea, leaf2);
-//     hea = insertNode(hea, leaf3);
-//     if(hea->left != NULL){
-//         printf("\nhello %s", hea->left->p);
-//     }
-//     // printf("\nhere is head.left's v %s", hea->left->v);
-//     printf("\n");
-//     printall(hea);
-//     return 1;
-// }
