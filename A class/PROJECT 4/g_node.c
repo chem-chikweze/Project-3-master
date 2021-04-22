@@ -20,3 +20,4 @@ void freeNode(NodePtr node, void (*freeObject)(void *))
     free(node);
 }
 
+int main(){}
